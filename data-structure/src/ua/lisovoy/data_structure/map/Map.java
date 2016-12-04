@@ -1,5 +1,6 @@
 package ua.lisovoy.data_structure.map;
 
+
 /**
  * Created by vladimir on 02.12.16.
  */
@@ -16,4 +17,11 @@ public interface Map {
     int size();
 
     Object remove(Object key);
+
+    void putAll(HashMap entries);
+
+    void clear();
+
+    boolean isEmpty();
+
 }
