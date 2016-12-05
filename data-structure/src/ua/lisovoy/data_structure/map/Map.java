@@ -4,23 +4,21 @@ package ua.lisovoy.data_structure.map;
 /**
  * Created by vladimir on 02.12.16.
  */
-public interface Map {
+public interface Map<K,V> {
 
-    Object put(Object key, Object value);
+    V put(K key, V value);
 
-    Object get(Object key);
+    V get(K key);
 
-    boolean containsKey(Object key);
+    boolean containsKey(K key);
 
-    Object putIfAbsent(Object key, Object value);
+    V putIfAbsent(K key, V value);
 
     int size();
 
-    Object remove(Object key);
+    V remove(K key);
 
     void putAll(HashMap entries);
-
-    void clear();
 
     boolean isEmpty();
 

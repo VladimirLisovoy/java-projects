@@ -3,7 +3,7 @@ package ua.lisovoy.data_structure.list;
 /**
  * Created by vladimir on 11/28/2016.
  */
-public abstract class AbstractList implements List {
+public abstract class AbstractList<E> implements List<E> {
 
     protected int size;
 
@@ -13,7 +13,7 @@ public abstract class AbstractList implements List {
     }
 
     @Override
-    public boolean contains(Object value) {
+    public boolean contains(E value) {
         return indexOf(value) != -1;
     }
 

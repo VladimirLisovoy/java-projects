@@ -6,15 +6,15 @@ import java.util.Iterator;
 /**
  * Created by vladimir on 11/28/2016.
  */
-public class ArrayList extends AbstractList {
+public class ArrayList<E> extends AbstractList<E> {
 
     private static final int INITIAL_CAPACITY = 5;
     private static final double INCREASE_PERCENTAGE = 1.5;
 
-    Object[] array;
+    E[] array;
 
     public ArrayList() {
-        array = new Object[INITIAL_CAPACITY];
+        array = (E[]) new Object[INITIAL_CAPACITY];
     }
 
     private int getNewCapacity() {
@@ -22,17 +22,17 @@ public class ArrayList extends AbstractList {
     }
 
     @Override
-    public int add(Object value) {
+    public int add(E value) {
         add(value, size);
         return size - 1;
     }
 
     @Override
-    public void add(Object value, int index) {
+    public void add(E value, int index) {
         validateAddIndex(index);
         if (size == array.length) {
             int newCapacity = getNewCapacity();
-            Object[] arrayExtend = new Object[newCapacity];
+            E[] arrayExtend = (E[]) new Object[newCapacity];
             System.arraycopy(array, 0, arrayExtend, 0, size);
             array = arrayExtend;
         }
@@ -42,7 +42,7 @@ public class ArrayList extends AbstractList {
     }
 
     @Override
-    public int indexOf(Object value) {
+    public int indexOf(E value) {
         for (int i = 0; i < size; i++) {
             if (array[i].equals(value)) {
                 return i;
@@ -52,7 +52,7 @@ public class ArrayList extends AbstractList {
     }
 
     @Override
-    public int lastIndexOf(Object value) {
+    public int lastIndexOf(E value) {
         for (int i = size - 1; i >= 0; i--) {
             if (array[i].equals(value)) {
                 return i;
@@ -62,9 +62,9 @@ public class ArrayList extends AbstractList {
     }
 
     @Override
-    public Object set(Object value, int index) {
+    public E set(E value, int index) {
         validateIndex(index);
-        Object oldValue = array[index];
+        E oldValue = array[index];
         array[index] = value;
         return oldValue;
     }
@@ -78,7 +78,7 @@ public class ArrayList extends AbstractList {
     }
 
     @Override
-    public Object get(int index) {
+    public E get(int index) {
         validateIndex(index);
         return array[index];
     }
@@ -97,12 +97,12 @@ public class ArrayList extends AbstractList {
     }
 
     @Override
-    public Iterator iterator() {
-        return new ArrayIterator();
+    public Iterator<E> iterator() {
+        return new ArrayIterator<E>();
     }
 
 
-    class ArrayIterator implements Iterator{
+    class ArrayIterator<E> implements Iterator<E> {
         private int counter;
 
         @Override
@@ -111,8 +111,8 @@ public class ArrayList extends AbstractList {
         }
 
         @Override
-        public Object next() {
-            return array[counter++];
+        public E next() {
+            return (E) array[counter++];
         }
 
         @Override

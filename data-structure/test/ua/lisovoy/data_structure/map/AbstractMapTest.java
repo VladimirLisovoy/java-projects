@@ -76,25 +76,18 @@ public abstract class AbstractMapTest {
         System.out.println(map);
     }
 
-    @Test
-    public void clear() throws Exception{
-        map.clear();
-        assertEquals(0,map.size());
-        assertFalse(map.containsKey("url"));
-        System.out.println(map);
-    }
 
     @Test
     public void putAll() throws Exception{
-        HashMap anotherMap = new HashMap();
-        anotherMap.put("red","1");
+        HashMap<String, String> anotherMap = new HashMap<String, String>();
+        anotherMap.put("user","admin");
         anotherMap.put("yellow","2");
         anotherMap.put("green","3");
         anotherMap.put("white","4");
 
         map.putAll(anotherMap);
 
-        assertEquals(4,map.size());
+        assertEquals(8,map.size());
         assertEquals("3",map.get("green"));
         System.out.println(map);
     }

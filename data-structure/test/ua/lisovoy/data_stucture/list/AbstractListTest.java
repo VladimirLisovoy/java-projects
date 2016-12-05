@@ -14,166 +14,155 @@ import static org.junit.Assert.*;
  */
 public abstract class AbstractListTest {
 
-    private List list;
+    private List<Integer> list;
 
     @Before
     public void before() {
         list = getList();
-        list.add("First");
+        list.add(1);
         list.add(4);
         list.add(3);
         list.add(4);
         list.add(5);
         list.add(6);
-        list.add("Last");
-        System.out.println("Initial list: " + list);
+        list.add(7);
+        System.out.println(list);
     }
 
-    public abstract List getList();
+    public abstract List<Integer> getList();
 
     @Test
     public void testAdd() throws Exception {
-        System.out.println("Add one more");
-        assertEquals(7, list.add("One more"));
+        assertEquals(7, list.add(8));
         assertEquals(8, list.size());
         System.out.println(list);
     }
 
     @Test
     public void testGetSize() throws Exception {
-        System.out.println("Get Size");
-        assertEquals(7, list.size());
-        System.out.println(list);
+        int size = list.size();
+        assertEquals(7, size);
+        System.out.println(size);
     }
 
     @Test
     public void testGetFirst() throws Exception {
-        System.out.println("Get First");
-        assertEquals("First", list.get(0));
-        System.out.println(list);
+        Integer firstValue = list.get(0);
+        System.out.println(firstValue);
+        assertEquals(new Integer(1), firstValue);
     }
 
     @Test
     public void testGetMiddle() throws Exception {
-        System.out.println("Get value 5, index 4");
-        assertEquals(5, list.get(4));
-        System.out.println(list);
+        Integer middleValue = list.get(4);
+        System.out.println(middleValue);
+        assertEquals(new Integer(5), middleValue);
     }
 
     @Test
     public void testGetLast() throws Exception {
-        System.out.println("Get Last");
-        assertEquals("Last", list.get(6));
-        System.out.println(list);
+        Integer lastValue = list.get(6);
+        System.out.println(lastValue);
+        assertEquals(new Integer(7), lastValue);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetWrong() throws Exception {
-        System.out.println("Get IllegalArgumentException by index 10");
-        assertEquals("Expected Exception", "First", list.get(10));
+        assertEquals(new Integer(1), list.get(10));
     }
 
     @Test
     public void testInsertFirst() throws Exception {
-        System.out.println("Insert before first");
-        list.add("BeforeFirst", 0);
+        list.add(0, 0);
         System.out.println(list);
         assertEquals(8, list.size());
-        assertEquals("BeforeFirst", list.get(0));
+        assertEquals(new Integer(0), list.get(0));
     }
 
     @Test
     public void testInsertMiddle() throws Exception {
-        System.out.println("Insert middle value");
-        list.add("Middle", 3);
+        list.add(3, 3);
         System.out.println(list);
         assertEquals(8, list.size());
-        assertEquals("Middle", list.get(3));
+        assertEquals(new Integer(3), list.get(3));
     }
 
     @Test
     public void testInsertLast() throws Exception {
-        System.out.println("Insert after last");
-        list.add("AfterLast", 7);
+        list.add(8, 7);
         System.out.println(list);
         assertEquals(8, list.size());
-        assertEquals("AfterLast", list.get(7));
+        assertEquals(new Integer(8), list.get(7));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInsertWrong() throws Exception {
-        System.out.println("Insert wrong value 33, index 33");
         list.add(33, 33);
     }
 
     @Test
     public void testIndexOf() throws Exception {
-        System.out.println("Index of value 4");
         assertEquals(1, list.indexOf(4));
-        System.out.println("Must return -1 for index of value 40");
         assertEquals(-1, list.indexOf(40));
         System.out.println(list);
     }
 
     @Test
     public void testLastIndexOf() throws Exception {
-        System.out.println("Last index of value 4");
         assertEquals(3, list.lastIndexOf(4));
-        System.out.println("Must return -1 for Last index of value 40");
         assertEquals(-1, list.lastIndexOf(40));
         System.out.println(list);
     }
 
     @Test
     public void testContains() throws Exception {
-        System.out.println("Contains value 4");
-        assertTrue(list.contains(4));
-        System.out.println("Not Contains value 40");
-        assertFalse(list.contains(40));
-        System.out.println(list);
+        boolean contains = list.contains(4);
+        assertTrue(contains);
+        System.out.println(contains);
+    }
+
+    @Test
+    public void testNotContains() throws Exception {
+        boolean contains = list.contains(40);
+        assertFalse(contains);
+        System.out.println(contains);
     }
 
     @Test
     public void testSetFist() throws Exception {
-        System.out.println("Set: First->FirstNew");
-        assertEquals("First", list.set("FirstNew", 0));
-        assertEquals("FirstNew", list.get(0));
+        assertEquals(new Integer(1), list.set(100, 0));
+        assertEquals(new Integer(100), list.get(0));
         System.out.println(list);
     }
 
     @Test
     public void testSetMiddle() throws Exception {
-        System.out.println("Set: 4->40");
-        assertEquals(4, list.set(40, 3));
-        assertEquals(40, list.get(3));
+        assertEquals(new Integer(4), list.set(40, 3));
+        assertEquals(new Integer(40), list.get(3));
         System.out.println(list);
     }
 
     @Test
     public void testSetLast() throws Exception {
-        System.out.println("Set: Last->LastNew");
-        assertEquals("Last", list.set("LastNew", 6));
-        assertEquals("LastNew", list.get(6));
+        assertEquals(new Integer(7), list.set(70, 6));
+        assertEquals(new Integer(70), list.get(6));
         System.out.println(list);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testSetWrong() throws Exception {
-        System.out.println("Set Incorrect index 10");
         list.set(10, 10);
     }
 
     @Test
     public void testRemoveFirst() throws Exception {
-        System.out.println("Remove: First");
         list.remove(0);
         System.out.println(list);
-        assertEquals(-1, list.indexOf("First"));
+        assertEquals(-1, list.indexOf(1));
     }
 
     @Test
     public void testRemoveMiddle() throws Exception {
-        System.out.println("Remove: value 3, index 2");
         list.remove(2);
         System.out.println(list);
         assertEquals(-1, list.indexOf(3));
@@ -181,30 +170,26 @@ public abstract class AbstractListTest {
 
     @Test
     public void testRemoveLast() throws Exception {
-        System.out.println("Remove: Last");
         list.remove(6);
         System.out.println(list);
-        assertEquals(-1, list.indexOf("Last"));
+        assertEquals(-1, list.indexOf(7));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testRemoveWrong() throws Exception {
-        System.out.println("Remove wrong index 60");
         list.remove(60);
     }
 
     @Test
     public void testClear() throws Exception {
-        System.out.println("Clear list");
         list.clear();
         System.out.println(list);
-        assertEquals(-1, list.indexOf("First"));
+        assertEquals(-1, list.indexOf(1));
         assertEquals(0, list.size());
     }
 
     @Test
     public void testIterator() throws Exception {
-        System.out.println("Iterator");
         int index = 0;
         for (Iterator iterator = list.iterator(); iterator.hasNext(); ) {
             Object value = iterator.next();
@@ -216,7 +201,6 @@ public abstract class AbstractListTest {
 
     @Test
     public void testIteratorRemove() throws Exception {
-        System.out.println("Remove value 3, index 2");
         int index = 0;
         for (Iterator iterator = list.iterator(); iterator.hasNext(); ) {
             iterator.next();

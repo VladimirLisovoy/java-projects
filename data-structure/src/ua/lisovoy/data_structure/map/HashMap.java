@@ -1,26 +1,25 @@
 package ua.lisovoy.data_structure.map;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Created by vladimir on 02.12.16.
  */
-public class HashMap extends AbstractMap {
+public class HashMap<K, V> extends AbstractMap<K, V> {
 
     private final static int INITIAL_CAPACITY = 5;
     private final static int MULTIPLY_CAPACITY = 10;
     private final static double INCREASE_PERCENTAGE = 2.5;
-    private ArrayList<Entry>[] entries;
+    private ArrayList<Entry<K, V>>[] entries;
 
     public HashMap() {
         entries = new ArrayList[INITIAL_CAPACITY];
     }
 
-    private Entry getEntry(Object key) {
+    private Entry<K, V> getEntry(K key) {
         int index = getIndex(key);
-        ArrayList<Entry> bucket = getBucket(index);
-        for (Entry entry : bucket) {
+        ArrayList<Entry<K, V>> bucket = getBucket(index);
+        for (Entry<K, V> entry : bucket) {
             if (entry.key.equals(key)) {
                 return entry;
             }
@@ -28,50 +27,48 @@ public class HashMap extends AbstractMap {
         return null;
     }
 
-    private ArrayList<Entry> getBucket(int index) {
+    private ArrayList<Entry<K, V>> getBucket(int index) {
         return entries[index];
     }
 
-    private int getIndex(Object key) {
-        return Math.abs(key.hashCode()) % entries.length;
+    private int getIndex(K key) {
+        int hashCode = Math.abs(key.hashCode());
+        return (hashCode < 0 ? Math.abs(hashCode-1) : hashCode) % entries.length;
     }
 
-
-    private int length() {
-        return entries.length;
-    }
 
     private void extendEntries(int newCapacity) {
-        ArrayList<Entry>[] temp = entries;
-        entries = new ArrayList[newCapacity];
-        for (ArrayList<Entry> bucket : temp) {
-            for (Entry entry : bucket) {
+        ArrayList<Entry<K, V>>[] newArray = new ArrayList[newCapacity];
+        for (ArrayList<Entry<K, V>> bucket : entries) {
+            for (Entry<K, V> entry : bucket) {
                 int index = getIndex(entry.key);
-                entries[index] = bucket;
+                newArray[index].add(entry);
             }
         }
+        entries = newArray;
     }
 
     @Override
-    public Object put(Object key, Object value) {
-        Entry entry = new Entry(key, value);
+    public V put(K key, V value) {
         if (size > entries.length * MULTIPLY_CAPACITY) {
             int newCapacity = (int) (entries.length * INCREASE_PERCENTAGE);
             extendEntries(newCapacity);
         }
+
         int index = getIndex(key);
-        ArrayList<Entry> bucket = getBucket(index);
+        ArrayList<Entry<K, V>> bucket = getBucket(index);
 
         if (containsKey(key)) {
-            Entry entryPrev = getEntry(key);
-            int bucketIndex = bucket.indexOf(entryPrev);
-            bucket.set(bucketIndex, entry);
-            return entryPrev.value;
+            Entry<K, V> entryPrevious = getEntry(key);
+            V previousValue = entryPrevious.value;
+            entryPrevious.value = value;
+            return previousValue;
         } else {
             if (bucket == null) {
-                bucket = new ArrayList<Entry>();
+                bucket = new ArrayList<Entry<K, V>>();
                 entries[index] = bucket;
             }
+            Entry<K, V> entry = new Entry<K, V>(key, value);
             bucket.add(entry);
             size++;
             return null;
@@ -80,10 +77,10 @@ public class HashMap extends AbstractMap {
 
 
     @Override
-    public Object get(Object key) {
+    public V get(K key) {
         int index = getIndex(key);
-        ArrayList<Entry> bucket = getBucket(index);
-        for (Entry entry : bucket) {
+        ArrayList<Entry<K, V>> bucket = getBucket(index);
+        for (Entry<K, V> entry : bucket) {
             if (entry.key.equals(key)) {
                 return entry.value;
             }
@@ -93,13 +90,13 @@ public class HashMap extends AbstractMap {
 
 
     @Override
-    public boolean containsKey(Object key) {
+    public boolean containsKey(K key) {
         int index = getIndex(key);
-        ArrayList<Entry> bucket = getBucket(index);
+        ArrayList<Entry<K, V>> bucket = getBucket(index);
         if (bucket == null) {
             return false;
         }
-        for (Entry entry : bucket) {
+        for (Entry<K,V> entry : bucket) {
             if (entry.key.equals(key)) {
                 return true;
             }
@@ -108,51 +105,35 @@ public class HashMap extends AbstractMap {
     }
 
     @Override
-    public Object putIfAbsent(Object key, Object value) {
-        Entry entry = getEntry(key);
-        if (entry == null) {
+    public V putIfAbsent(K key, V value) {
+        if (!containsKey(key)) {
             put(key, value);
             return value;
         }
-        return entry.value;
+        return getEntry(key).value;
     }
 
     @Override
     public void putAll(HashMap map) {
-        if (size < map.size()) {
-            extendEntries(map.size());
+        if (size < map.size) {
+            extendEntries(map.size);
         }
-        clear();
-        for (int i = 0; i < map.length(); i++) {
-            ArrayList<Entry> bucket = map.getBucket(i);
+        for (int i = 0; i < map.entries.length; i++) {
+            ArrayList<Entry<K, V>> bucket = map.getBucket(i);
             if (bucket != null) {
-                for (Entry entry : bucket) {
+                for (Entry<K, V> entry : bucket) {
                     put(entry.key, entry.value);
                 }
             }
         }
     }
 
-    @Override
-    public void clear() {
-        for (int index = 0; index < entries.length; index++) {
-            entries[index] = null;
-        }
-        size = 0;
-    }
-
 
     @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-
-    @Override
-    public Object remove(Object key) {
+    public V remove(K key) {
         if (containsKey(key)) {
             int index = getIndex(key);
-            ArrayList<Entry> bucket = getBucket(index);
+            ArrayList<Entry<K, V>> bucket = getBucket(index);
             for (int i = 0; i < bucket.size(); i++) {
                 if (bucket.get(i).key.equals(key)) {
                     size--;
@@ -170,11 +151,11 @@ public class HashMap extends AbstractMap {
                 '}';
     }
 
-    private static class Entry {
-        Object key;
-        Object value;
+    private static class Entry<K, V> {
+        K key;
+        V value;
 
-        public Entry(Object key, Object value) {
+        public Entry(K key, V value) {
             this.key = key;
             this.value = value;
         }

@@ -4,25 +4,25 @@ package ua.lisovoy.data_structure.list;
 /**
  * Created by vladimir on 11/28/2016.
  */
-public interface List extends Iterable {
+public interface List<E> extends Iterable {
 
     int size();
 
-    int add(Object value);
+    int add(E value);
 
-    void add(Object value, int index);
+    void add(E value, int index);
 
-    int indexOf(Object value);
+    int indexOf(E value);
 
-    int lastIndexOf(Object value);
+    int lastIndexOf(E value);
 
-    boolean contains(Object value);
+    boolean contains(E value);
 
-    Object set(Object value, int index);
+    E set(E value, int index);
 
     void clear();
 
-    Object get(int index);
+    E get(int index);
 
     void remove(int index);
 

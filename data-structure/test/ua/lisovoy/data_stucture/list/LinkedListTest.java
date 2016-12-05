@@ -9,7 +9,7 @@ import ua.lisovoy.data_structure.list.List;
 public class LinkedListTest extends AbstractListTest {
 
     @Override
-    public List getList() {
-        return new LinkedList();
+    public List<Integer> getList() {
+        return new LinkedList<Integer>();
     }
 }
