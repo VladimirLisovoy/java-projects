@@ -58,12 +58,10 @@ public class LogAnalyzer {
         while (matcherTime.find()) {
             timeInChar = matcherTime.group();
         }
-        System.out.println(timeInChar);
-        timeInChar = "07/Mar/2004:16:05:49";
+
         if (timeInChar != null) {
             time = LocalDateTime.parse(timeInChar, DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss"));
         }
-        System.out.println(time);
 
         if (httpMethod != null && message != null && time != null){
             return new LogToken(time, httpMethod, message);

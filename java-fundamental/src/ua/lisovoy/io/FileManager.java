@@ -51,28 +51,25 @@ public class FileManager {
         File fileOutput;
         if (fileInput.exists()) {
             if (fileInput.isFile()) {
-                InputStream inputStream = new FileInputStream(fileInput);
                 fileOutput = new File(to);
-                OutputStream outputStream = new FileOutputStream(fileOutput);
+
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(fileInput));
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileOutput));
+
                 int value;
-                while ((value = inputStream.read()) != -1) {
-                    outputStream.write((byte) value);
+                while ((value = bufferedReader.read()) != -1) {
+                    bufferedWriter.write(value);
                 }
-                inputStream.close();
-                outputStream.close();
+                bufferedReader.close();
+                bufferedWriter.close();
             } else {
-                fileOutput = new File(to + "\\" + fileInput.getName());
+                fileOutput = new File(to + fileInput.separator + fileInput.getName());
                 fileOutput.mkdir();
                 File[] files = fileInput.listFiles();
                 if (files != null) {
                     for (File file : files) {
-                        String nameFile;
-                        if (file.isFile()) {
-                            nameFile = fileOutput.getCanonicalPath() + "\\" + file.getName();
-                        } else {
-                            nameFile = fileOutput.getCanonicalPath();
-                        }
-                        FileManager.copy(file.getCanonicalPath(), nameFile);
+                        String fullPathTo = fileOutput.getCanonicalPath() + (file.isFile() ?  fileInput.separator + file.getName() : "");
+                        FileManager.copy(file.getCanonicalPath(), fullPathTo);
                     }
                 }
             }
@@ -93,13 +90,11 @@ public class FileManager {
             File[] files = fileInput.listFiles();
             if (files != null) {
                 for (File file : files) {
-                    if (file.isFile()) {
-                        file.delete();
-                    } else {
-                        FileManager.delete(file.getCanonicalPath());
-                    }
+                    FileManager.delete(file.getCanonicalPath());
+                    file.delete();
                 }
             }
         }
+        fileInput.delete();
     }
 }
