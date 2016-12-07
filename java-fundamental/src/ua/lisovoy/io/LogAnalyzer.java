@@ -3,6 +3,7 @@ package ua.lisovoy.io;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,7 +31,7 @@ public class LogAnalyzer {
                     logList.add(token);
                 }
             }
-            return new ArrayList<LogToken>();
+            return logList;
         }
         return null;
     }
@@ -59,8 +60,12 @@ public class LogAnalyzer {
             timeInChar = matcherTime.group();
         }
 
-        if (timeInChar != null) {
-            time = LocalDateTime.parse(timeInChar, DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss"));
+        try {
+            if (timeInChar != null && timeInChar.length() > 20) {
+                time = LocalDateTime.parse(timeInChar, DateTimeFormatter.ofPattern("dd/MMM/yyyy:kk:mm:ss Z"));
+            }
+        } catch (DateTimeParseException e){
+            time = null;
         }
 
         if (httpMethod != null && message != null && time != null){
