@@ -5,6 +5,7 @@ import ua.lisovoy.io.LogAnalyzer;
 import ua.lisovoy.io.LogToken;
 import ua.lisovoy.multithread.*;
 import ua.lisovoy.multithread.Timer;
+import ua.lisovoy.serialization.CustomMessageStore;
 import ua.lisovoy.serialization.Message;
 import ua.lisovoy.serialization.SerializationMessageStore;
 
@@ -38,6 +39,15 @@ public class App {
       //  sms.persist(messages);
 
        // System.out.println(sms.read());
+
+        Collection<Message> messages = new ArrayList<Message>();
+         messages.add(new Message(1, new Date(), "First mess"));
+          messages.add(new Message(2, new Date(), "Second mess"));
+         messages.add(new Message(3, new Date(), "Last mess"));
+          CustomMessageStore cms = new CustomMessageStore();
+        cms.persist(messages);
+
+        System.out.println(cms.read());
 /*
         List<Thread> threadList = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
@@ -48,7 +58,7 @@ public class App {
 
         System.out.println("Main finished");
         */
-
+/*
         InputStream inputStream = System.in;
         Reader inputStreamReader = new InputStreamReader(inputStream);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -58,6 +68,6 @@ public class App {
         while(true) {
             inputList.add(bufferedReader.readLine());
         }
-
+*/
     }
 }

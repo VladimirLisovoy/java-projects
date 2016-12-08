@@ -1,6 +1,7 @@
 package ua.lisovoy.serialization;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -16,6 +17,14 @@ public class Message implements Serializable {
     public Message(int id, Date date, String content) {
         this.id = id;
         this.date = date;
+        this.content = content;
+    }
+
+    public Message(int id, long date, String content) {
+        this.id = id;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+        this.date = calendar.getTime();
         this.content = content;
     }
 

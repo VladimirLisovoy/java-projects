@@ -17,7 +17,7 @@ public class InputContainer implements Runnable{
     }
 
     public void save (){
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File("input.list")))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("input.list"))) {
             for (String input : inputList) {
                 bw.write(input);
                 bw.newLine();
