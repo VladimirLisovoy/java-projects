@@ -6,20 +6,20 @@ import java.util.StringJoiner;
 /**
  * Created by vladimir on 11/28/2016.
  */
-public class LinkedList extends AbstractList {
-    private Node head;
-    private Node tail;
+public class LinkedList<E> extends AbstractList<E> {
+    private Node<E> head;
+    private Node<E> tail;
 
     @Override
-    public int add(Object value) {
+    public int add(E value) {
         add(value, size);
         return size - 1;
     }
 
     @Override
-    public void add(Object value, int index) {
+    public void add(E value, int index) {
         validateAddIndex(index);
-        Node node = new Node(value);
+        Node<E> node = new Node<E>(value);
         if (size == 0) {
             head = tail = node;
         } else if (index == size) {
@@ -31,7 +31,7 @@ public class LinkedList extends AbstractList {
             head.prev = node;
             head = node;
         } else {
-            Node temp = getNode(index);
+            Node<E> temp = getNode(index);
             node.next = temp;
             node.prev = temp.prev;
             temp.prev.next = temp.prev = node;
@@ -40,8 +40,8 @@ public class LinkedList extends AbstractList {
     }
 
     @Override
-    public int indexOf(Object value) {
-        Node temp = head;
+    public int indexOf(E value) {
+        Node<E> temp = head;
         for (int i = 0; i < size; i++) {
             if (temp.value.equals(value)) {
                 return i;
@@ -52,8 +52,8 @@ public class LinkedList extends AbstractList {
     }
 
     @Override
-    public int lastIndexOf(Object value) {
-        Node temp = tail;
+    public int lastIndexOf(E value) {
+        Node<E> temp = tail;
         for (int i = size - 1; i >= 0; i--) {
             if (temp.value.equals(value)) {
                 return i;
@@ -65,10 +65,10 @@ public class LinkedList extends AbstractList {
 
 
     @Override
-    public Object set(Object value, int index) {
+    public E set(E value, int index) {
         validateIndex(index);
-        Node temp = getNode(index);
-        Object oldValue = temp.value;
+        Node<E> temp = getNode(index);
+        E oldValue = temp.value;
         temp.value = value;
         return oldValue;
     }
@@ -80,13 +80,13 @@ public class LinkedList extends AbstractList {
     }
 
     @Override
-    public Object get(int index) {
+    public E get(int index) {
         validateIndex(index);
         return getNode(index).value;
     }
 
-    private Node getNode(int index) {
-        Node temp;
+    private Node<E> getNode(int index) {
+        Node<E> temp;
         if (index < size / 2) {
             temp = head;
             for (int i = 0; i < index; i++) {
@@ -113,7 +113,7 @@ public class LinkedList extends AbstractList {
             tail = tail.prev;
             tail.next = null;
         } else {
-            Node temp = getNode(index);
+            Node<E> temp = getNode(index);
             temp.next.prev = temp.prev;
             temp.prev.next = temp.next;
         }
@@ -121,8 +121,8 @@ public class LinkedList extends AbstractList {
     }
 
     @Override
-    public Iterator iterator() {
-        return new LinkedIterator();
+    public Iterator<E> iterator() {
+        return new LinkedIterator<E>();
     }
 
     @Override
@@ -137,17 +137,17 @@ public class LinkedList extends AbstractList {
     }
 
 
-    private static class Node {
-        Object value;
-        Node next;
-        Node prev;
+    private static class Node<E> {
+        E value;
+        Node<E> next;
+        Node<E> prev;
 
-        public Node(Object value) {
+        public Node(E value) {
             this.value = value;
         }
     }
 
-    class LinkedIterator implements Iterator {
+    class LinkedIterator<E> implements Iterator<E> {
         private int counter;
 
         @Override
@@ -156,8 +156,8 @@ public class LinkedList extends AbstractList {
         }
 
         @Override
-        public Object next() {
-            return getNode(counter++).value;
+        public E next() {
+            return (E) getNode(counter++).value;
         }
 
         @Override
