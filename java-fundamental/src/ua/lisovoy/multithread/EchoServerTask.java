@@ -1,7 +1,6 @@
 package ua.lisovoy.multithread;
 
-import java.io.*;
-import java.net.Socket;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -9,38 +8,20 @@ import java.util.List;
  */
 public class EchoServerTask implements Runnable {
 
-    private List<Socket> socketList;
+    private List<EchoSocketStream> socketList;
 
-    public EchoServerTask(List<Socket> socketList) {
+    public EchoServerTask(List<EchoSocketStream> socketList) {
         this.socketList = socketList;
     }
 
     @Override
     public void run() {
         while (true) {
-
-            for (int i = 0; i < socketList.size(); i++) {
-                try {
-                    if (socketList.get(i).getInputStream().available() > 0) {
-
-                        BufferedReader bufferedReader = new BufferedReader(
-                                new InputStreamReader(socketList.get(i).getInputStream()));
-
-                        if (bufferedReader.ready()) {
-                            String line = bufferedReader.readLine();
-                            BufferedWriter bufferedWriter = new BufferedWriter(
-                                    new OutputStreamWriter(socketList.get(i).getOutputStream()));
-                            bufferedWriter.write(line);
-                            bufferedWriter.newLine();
-                            bufferedWriter.flush();
-                        }
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+            for (EchoSocketStream socketStream : socketList) {
+                if (socketStream.isAvailable()) {
+                    socketStream.echo();
                 }
             }
         }
-
     }
 }

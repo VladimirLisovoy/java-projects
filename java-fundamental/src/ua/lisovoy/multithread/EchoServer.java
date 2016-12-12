@@ -7,32 +7,22 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EchoServer {
 
     public static void main(String[] args) {
-        ServerSocket serverSocket = null;
-        List<Socket> socketList = Collections.synchronizedList(new ArrayList<Socket>());
-        try {
-            serverSocket = new ServerSocket(3000);
-            EchoServerTask serverTask = new EchoServerTask(socketList);
-            Thread thread = new Thread(serverTask);
+        List<EchoSocketStream> socketList = Collections.synchronizedList(new CopyOnWriteArrayList<EchoSocketStream>());
+        try (ServerSocket serverSocket = new ServerSocket(3000)) {
+            Thread thread = new Thread(new EchoServerTask(socketList));
             thread.start();
             System.out.println("Server started...");
-
             while (true) {
                 Socket socket = serverSocket.accept();
-                socketList.add(socket);
+                socketList.add(new EchoSocketStream(socket));
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                serverSocket.close();
-                System.out.println("Server finished.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
