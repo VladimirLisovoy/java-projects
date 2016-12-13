@@ -30,7 +30,7 @@ public class SharedServerService implements Runnable {
             while (true) {
                 if (bufferedReader.ready()) {
                     dbManager.pull(getQuery());
-                    for (String resultLine : dbManager.getResult()) {
+                    for (String resultLine : dbManager.push()) {
                         bufferedWriter.write(resultLine);
                     }
                     bufferedWriter.flush();
@@ -41,12 +41,12 @@ public class SharedServerService implements Runnable {
         }
     }
 
-    private Query getQuery() throws IOException{
+    private String getQuery() throws IOException{
         StringBuilder queryBuilder = new StringBuilder();
         String value;
         while ((value = bufferedReader.readLine()) != null) {
             queryBuilder.append(value);
         }
-        return new Query(queryBuilder.toString());
+        return queryBuilder.toString();
     }
 }
